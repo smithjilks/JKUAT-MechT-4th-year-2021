@@ -44,6 +44,10 @@ if(roots_type == 3)
     disp(sol);
 end
 
+dSolveSolution = solveEquationWithDSolve(a,b,c, first_initial_condition, second_initial_condition);
+disp("DSolve Solution");
+disp(dSolveSolution);
+
 
 
 
@@ -142,4 +146,17 @@ function problemSolution = solveEquationWithComplexRoots(a,b,c,y1,y2)
 
 end
 
+function dSolveSolution = solveEquationWithDSolve(a, b, c, y1, y2)
+    
+    syms y(x)
+    Dy = diff(y);
 
+    ode_eqn = a * diff(y,x,2) + b * diff(y,x) + c * y == 0;
+
+    cond1 = y(0) == y1;
+    cond2 = Dy(0) == y2;
+
+    dSolveSolution = dsolve(ode_eqn, [cond1, cond2]);
+
+
+end
