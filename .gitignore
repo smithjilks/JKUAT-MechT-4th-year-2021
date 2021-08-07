@@ -1,0 +1,5 @@
+# ignore emacs back-up files
+*.*~
+
+# ignore emacs currently-being-edited files
+*.*[#]
