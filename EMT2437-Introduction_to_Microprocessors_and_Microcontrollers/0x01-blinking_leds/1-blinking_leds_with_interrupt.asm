@@ -1,0 +1,55 @@
+$NOMOD51
+$INCLUDE (8051.MCU)
+
+LED1		BIT		P2.0
+LED2		BIT		P2.1
+LED3		BIT		P2.2
+
+	org   0000h
+	jmp   START
+
+	ORG 13H
+	JMP BLINKING ;JUMP TO BLINKING IF THE EXTERNAL INTERRUPT OCCURS
+	RETI
+
+START:
+	SETB LED1 ;SWITCHOFF LED1
+	SETB LED2 ;SWITCHOFF LED2
+	SETB LED3 ;SWITCHOFF LED3
+	SETB EX1 ; ENABLE EXTERNAL INTERRUPT 1
+	SETB EA ;ENABLE ALL INTERRUPTS
+	jmp START
+
+
+BLINKING:
+	MOV R1, #50D
+	MOV R2, #100D
+	MOV R3, #130D
+
+LOOP:    ACALL DELAY
+
+SWITCH1:
+        DJNZ R1, SWITCH2
+        CPL LED1
+        MOV R1, #50D
+SWITCH2:
+        DJNZ R2, SWITCH3
+        CPL LED2
+        MOV R2, #100D
+SWITCH3:
+        DJNZ R3, LOOP
+        CPL LED3
+        MOV R3, #130D
+
+	SJMP LOOP
+
+DELAY:
+	MOV TMOD, #01H ; Initialize timer 0 in mode 0
+	MOV TH0, #0DBH ; Higher counter bit
+	MOV TL0, #0FFH ; Lower counter bit
+	SETB TCON.4 ; Start timer
+L1: JNB TCON.5, L1 ; Check timer flag bit in loop
+	CLR TCON.4 ; Stop the timer
+	CLR TCON.5 ; Clear the timer flag
+	RET
+END
