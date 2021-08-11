@@ -34,7 +34,7 @@ SWITCH2:
         CPL LED2
         MOV R2, #100D
 SWITCH3:
-        DJNZ R3, RPT
+        DJNZ R3, LOOP
         CPL LED3
         MOV R3, #130D
 
